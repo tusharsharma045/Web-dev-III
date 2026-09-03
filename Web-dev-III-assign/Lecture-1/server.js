@@ -1,6 +1,4 @@
-// server.js - Basic HTTP Server using the http Module
-// Web Dev III - Lab Assignment 1
-// Handles multiple routes: /, /about, /contact, and 404 for unknown routes.
+// server.js
 // Usage: node server.js
 
 const http = require("http");
@@ -9,10 +7,6 @@ const logger = require("./modules/logger");
 const PORT = 3000;
 const HOST = "127.0.0.1";
 
-// ── Route Handler ──────────────────────────────────────────────
-/**
- * Sends an HTML response with a given status code and body content.
- */
 function sendResponse(res, statusCode, title, bodyContent, bgColor = "#1a1a2e") {
   res.writeHead(statusCode, { "Content-Type": "text/html" });
   res.end(`<!DOCTYPE html>
@@ -76,12 +70,10 @@ function sendResponse(res, statusCode, title, bodyContent, bgColor = "#1a1a2e") 
 </html>`);
 }
 
-// ── Create HTTP Server ─────────────────────────────────────────
 const server = http.createServer((req, res) => {
   const url    = req.url;
   const method = req.method;
 
-  // Log incoming request
   logger.info(`${method} ${url}`);
 
   switch (url) {
@@ -139,7 +131,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-// ── Start Server ───────────────────────────────────────────────
 server.listen(PORT, HOST, () => {
   logger.success(`Server running at http://${HOST}:${PORT}`);
   console.log("\x1b[36m%s\x1b[0m", "\nAvailable Routes:");

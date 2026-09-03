@@ -1,23 +1,18 @@
-// calculator.js - CLI-Based Calculator using process.argv
-// Web Dev III - Lab Assignment 1
+// calculator.js
 // Usage: node calculator.js <operation> <num1> <num2>
-// Example: node calculator.js add 10 5
 
-const args = process.argv.slice(2); // Remove 'node' and 'calculator.js'
+const args = process.argv.slice(2);
 
-// ANSI Color codes for terminal output
 const colors = {
   reset:  "\x1b[0m",
   red:    "\x1b[31m",
   green:  "\x1b[32m",
   yellow: "\x1b[33m",
   cyan:   "\x1b[36m",
-  bold:   "\x1b[1m",
 };
 
 console.log(colors.cyan + "=== CLI Calculator ===" + colors.reset);
 
-// Validate argument count
 if (args.length < 3) {
   console.log(colors.red + "❌ Error: Not enough arguments." + colors.reset);
   console.log(colors.yellow + "Usage: node calculator.js <operation> <num1> <num2>" + colors.reset);
@@ -29,7 +24,6 @@ const operation = args[0].toLowerCase();
 const num1 = parseFloat(args[1]);
 const num2 = parseFloat(args[2]);
 
-// Validate that inputs are numbers
 if (isNaN(num1) || isNaN(num2)) {
   console.log(colors.red + "❌ Error: Please provide valid numbers." + colors.reset);
   process.exit(1);
@@ -37,7 +31,6 @@ if (isNaN(num1) || isNaN(num2)) {
 
 let result;
 
-// Perform the requested operation
 switch (operation) {
   case "add":
     result = num1 + num2;
