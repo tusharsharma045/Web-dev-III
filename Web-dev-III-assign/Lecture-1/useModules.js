@@ -1,44 +1,32 @@
-// useModules.js - Demonstrates Custom Module Reusability
+// useModules.js
+// This file shows how to use custom modules with require()
+// We import our isEven and logger modules from the modules/ folder
 
-const { isEven, isOdd, getEvenOddLabel, filterEven, filterOdd } = require("./modules/isEven");
+// Import our custom modules
+const isEvenModule = require("./modules/isEven");
 const logger = require("./modules/logger");
 
-console.log("\x1b[36m%s\x1b[0m", "=== Custom Module Demonstration ===\n");
+console.log("=== Custom Module Demo ===\n");
 
-logger.info("Starting custom module demonstration...");
-logger.debug("Modules loaded: isEven.js, logger.js");
+// --- Using the logger module ---
+logger.info("Logger module is working!");
+logger.success("Modules loaded successfully.");
 
-console.log("\n\x1b[33m--- isEven Module Demo ---\x1b[0m");
+// --- Using the isEven module ---
+console.log("\n--- Checking Even or Odd ---");
 
-const testNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+var numbers = [1, 2, 3, 4, 5, 6];
 
-testNumbers.forEach((num) => {
-  const label = getEvenOddLabel(num);
-  const emoji = isEven(num) ? "✅" : "❌";
-  console.log(`  ${emoji} ${num} → ${label}`);
-});
-
-console.log("\n\x1b[33m--- Filtering Even & Odd Numbers ---\x1b[0m");
-
-const evenNumbers = filterEven(testNumbers);
-const oddNumbers  = filterOdd(testNumbers);
-
-logger.success(`Even numbers from [${testNumbers}]: [${evenNumbers}]`);
-logger.success(`Odd  numbers from [${testNumbers}]: [${oddNumbers}]`);
-
-console.log("\n\x1b[33m--- Individual Function Tests ---\x1b[0m");
-
-logger.info(`isEven(42)  → ${isEven(42)}`);
-logger.info(`isOdd(17)   → ${isOdd(17)}`);
-logger.info(`isEven(0)   → ${isEven(0)}`);
-logger.info(`isOdd(1001) → ${isOdd(1001)}`);
-
-console.log("\n\x1b[33m--- Error Handling Demo ---\x1b[0m");
-try {
-  isEven("hello");
-} catch (err) {
-  logger.error(`Caught expected error: ${err.message}`);
+for (var i = 0; i < numbers.length; i++) {
+  var num = numbers[i];
+  var label = isEvenModule.getEvenOddLabel(num);
+  console.log(num + " is " + label);
 }
 
-console.log("");
-logger.success("Module demonstration complete!");
+// --- Testing isEven and isOdd directly ---
+console.log("\n--- Direct Function Tests ---");
+console.log("isEven(10) =", isEvenModule.isEven(10));  // true
+console.log("isOdd(7)   =", isEvenModule.isOdd(7));    // true
+console.log("isEven(3)  =", isEvenModule.isEven(3));   // false
+
+logger.success("Module demo complete!");

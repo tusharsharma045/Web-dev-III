@@ -1,32 +1,29 @@
-// isEven.js - Custom Module
+// isEven.js
+// A custom module that checks if a number is even or odd
+// We export functions so other files can use them with require()
 
+// Returns true if the number is even, false if odd
 function isEven(num) {
-  if (typeof num !== "number" || isNaN(num)) {
-    throw new Error(`isEven() expects a number, got: ${typeof num}`);
-  }
   return num % 2 === 0;
 }
 
+// Returns true if the number is odd
 function isOdd(num) {
-  return !isEven(num);
+  return num % 2 !== 0;
 }
 
+// Returns "Even" or "Odd" as a string
 function getEvenOddLabel(num) {
-  return isEven(num) ? "Even" : "Odd";
+  if (num % 2 === 0) {
+    return "Even";
+  } else {
+    return "Odd";
+  }
 }
 
-function filterEven(arr) {
-  return arr.filter(isEven);
-}
-
-function filterOdd(arr) {
-  return arr.filter(isOdd);
-}
-
+// Export all three functions so other files can use them
 module.exports = {
   isEven,
   isOdd,
   getEvenOddLabel,
-  filterEven,
-  filterOdd,
 };

@@ -1,61 +1,43 @@
-// logger.js - Custom Logger Module
+// logger.js
+// A custom logger module that prints messages with a timestamp
+// Each log level has its own color so it's easy to read in the terminal
 
-const colors = {
-  reset:   "\x1b[0m",
-  bold:    "\x1b[1m",
-  red:     "\x1b[31m",
-  green:   "\x1b[32m",
-  yellow:  "\x1b[33m",
-  blue:    "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan:    "\x1b[36m",
-  white:   "\x1b[37m",
-  gray:    "\x1b[90m",
-};
+// These are ANSI color codes - they change text color in the terminal
+const green  = "\x1b[32m";
+const yellow = "\x1b[33m";
+const red    = "\x1b[31m";
+const blue   = "\x1b[34m";
+const reset  = "\x1b[0m"; // resets back to default color
 
+// Returns the current date and time as a string
 function getTimestamp() {
-  const now  = new Date();
-  const date = now.toLocaleDateString("en-CA");
-  const time = now.toLocaleTimeString("en-US", { hour12: false });
-  return `${date} ${time}`;
+  return new Date().toLocaleString();
 }
 
-function formatLog(level, color, message) {
-  const timestamp = colors.gray + `[${getTimestamp()}]` + colors.reset;
-  const levelTag  = color + colors.bold + `[${level}]` + colors.reset;
-  console.log(`${timestamp} ${levelTag} ${message}`);
-}
-
+// INFO - for general information (blue)
 function info(message) {
-  formatLog("INFO   ", colors.blue, message);
+  console.log(blue + "[INFO] " + getTimestamp() + " - " + message + reset);
 }
 
-function warn(message) {
-  formatLog("WARN   ", colors.yellow, message);
-}
-
-function error(message) {
-  formatLog("ERROR  ", colors.red, message);
-}
-
-function debug(message) {
-  formatLog("DEBUG  ", colors.magenta, message);
-}
-
+// SUCCESS - when something works (green)
 function success(message) {
-  formatLog("SUCCESS", colors.green, message);
+  console.log(green + "[SUCCESS] " + getTimestamp() + " - " + message + reset);
 }
 
-function log(message) {
-  formatLog("LOG    ", colors.cyan, message);
+// WARN - for warnings (yellow)
+function warn(message) {
+  console.log(yellow + "[WARN] " + getTimestamp() + " - " + message + reset);
 }
 
+// ERROR - when something goes wrong (red)
+function error(message) {
+  console.log(red + "[ERROR] " + getTimestamp() + " - " + message + reset);
+}
+
+// Export the functions so other files can use this logger
 module.exports = {
   info,
+  success,
   warn,
   error,
-  debug,
-  success,
-  log,
-  getTimestamp,
 };

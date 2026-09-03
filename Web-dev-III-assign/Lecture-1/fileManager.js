@@ -1,96 +1,56 @@
 // fileManager.js
+// Shows how to Create, Read, Update, and Delete files using the fs module
 // Usage: node fileManager.js
 
-const fs     = require("fs");
-const path   = require("path");
+// Import built-in modules
+const fs = require("fs");
 const logger = require("./modules/logger");
 
-const FILE_PATH = path.join(__dirname, "demo.txt");
+const fileName = "demo.txt"; // the file we will work with
 
-console.log("\x1b[36m%s\x1b[0m", "=== File Manager (fs Module Demo) ===\n");
+console.log("=== File Manager Demo ===\n");
 
-function createFile() {
-  logger.info("Creating file: demo.txt ...");
-  const content = "Hello, Node.js! This file was created by the fs module.\nLine 2: File creation complete.\n";
+// ── STEP 1: CREATE a file ──────────────────────────────────────
+logger.info("Step 1: Creating file...");
 
-  fs.writeFile(FILE_PATH, content, "utf8", (err) => {
+fs.writeFile(fileName, "Hello! This file was created by Node.js.\n", function(err) {
+  if (err) {
+    logger.error("Could not create file: " + err.message);
+    return;
+  }
+  logger.success("File created: " + fileName);
+
+  // ── STEP 2: READ the file ────────────────────────────────────
+  logger.info("Step 2: Reading file...");
+
+  fs.readFile(fileName, "utf8", function(err, data) {
     if (err) {
-      logger.error(`Failed to create file: ${err.message}`);
+      logger.error("Could not read file: " + err.message);
       return;
     }
-    logger.success(`File created successfully at: ${FILE_PATH}`);
-    readFile();
-  });
-}
+    logger.success("File contents: " + data);
 
-function readFile() {
-  logger.info("Reading file: demo.txt ...");
+    // ── STEP 3: UPDATE the file (append more text) ─────────────
+    logger.info("Step 3: Updating file (appending text)...");
 
-  fs.readFile(FILE_PATH, "utf8", (err, data) => {
-    if (err) {
-      if (err.code === "ENOENT") {
-        logger.error("File not found! Make sure it exists before reading.");
-      } else {
-        logger.error(`Failed to read file: ${err.message}`);
-      }
-      return;
-    }
-    logger.success("File contents:");
-    console.log("\x1b[90m────────────────────────────────\x1b[0m");
-    console.log(data);
-    console.log("\x1b[90m────────────────────────────────\x1b[0m");
-    updateFile();
-  });
-}
-
-function updateFile() {
-  logger.info("Updating (appending to) file: demo.txt ...");
-  const appendContent = `Line 3: File updated at ${new Date().toLocaleString()}.\nLine 4: fs.appendFile() works great!\n`;
-
-  fs.appendFile(FILE_PATH, appendContent, "utf8", (err) => {
-    if (err) {
-      logger.error(`Failed to update file: ${err.message}`);
-      return;
-    }
-    logger.success("File updated (appended) successfully!");
-    logger.info("Reading updated file...");
-
-    fs.readFile(FILE_PATH, "utf8", (readErr, data) => {
-      if (readErr) {
-        logger.error(`Failed to re-read file: ${readErr.message}`);
+    fs.appendFile(fileName, "This line was added later.\n", function(err) {
+      if (err) {
+        logger.error("Could not update file: " + err.message);
         return;
       }
-      console.log("\x1b[90m────────────────────────────────\x1b[0m");
-      console.log(data);
-      console.log("\x1b[90m────────────────────────────────\x1b[0m");
-      deleteFile();
+      logger.success("File updated successfully!");
+
+      // ── STEP 4: DELETE the file ───────────────────────────────
+      logger.info("Step 4: Deleting file...");
+
+      fs.unlink(fileName, function(err) {
+        if (err) {
+          logger.error("Could not delete file: " + err.message);
+          return;
+        }
+        logger.success("File deleted successfully!");
+        console.log("\n=== All 4 CRUD steps done! ===");
+      });
     });
   });
-}
-
-function deleteFile() {
-  logger.info("Deleting file: demo.txt ...");
-
-  fs.unlink(FILE_PATH, (err) => {
-    if (err) {
-      if (err.code === "ENOENT") {
-        logger.error("Cannot delete: File not found.");
-      } else {
-        logger.error(`Failed to delete file: ${err.message}`);
-      }
-      return;
-    }
-    logger.success("File deleted successfully!");
-    logger.info("Verifying deletion...");
-
-    fs.readFile(FILE_PATH, "utf8", (readErr) => {
-      if (readErr && readErr.code === "ENOENT") {
-        logger.warn("Confirmed: File no longer exists.");
-      }
-      console.log("");
-      logger.success("=== File Manager Demo Complete! ===");
-    });
-  });
-}
-
-createFile();
+});

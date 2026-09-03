@@ -1,77 +1,39 @@
 // calculator.js
-// Usage: node calculator.js <operation> <num1> <num2>
+// A simple CLI calculator using process.argv
+// Usage: node calculator.js add 10 5
 
-const args = process.argv.slice(2);
+// process.argv holds all command line arguments
+// process.argv[0] = node, process.argv[1] = calculator.js
+// So our actual inputs start from index 2
+const operation = process.argv[2]; // e.g. "add"
+const num1 = Number(process.argv[3]); // first number
+const num2 = Number(process.argv[4]); // second number
 
-const colors = {
-  reset:  "\x1b[0m",
-  red:    "\x1b[31m",
-  green:  "\x1b[32m",
-  yellow: "\x1b[33m",
-  cyan:   "\x1b[36m",
-};
-
-console.log(colors.cyan + "=== CLI Calculator ===" + colors.reset);
-
-if (args.length < 3) {
-  console.log(colors.red + "❌ Error: Not enough arguments." + colors.reset);
-  console.log(colors.yellow + "Usage: node calculator.js <operation> <num1> <num2>" + colors.reset);
-  console.log("Operations: add, subtract, multiply, divide, modulus, power");
+// Show error if user didn't provide all arguments
+if (!operation || isNaN(num1) || isNaN(num2)) {
+  console.log("Please provide an operation and two numbers.");
+  console.log("Example: node calculator.js add 10 5");
   process.exit(1);
 }
 
-const operation = args[0].toLowerCase();
-const num1 = parseFloat(args[1]);
-const num2 = parseFloat(args[2]);
+// Perform the chosen operation
+if (operation === "add") {
+  console.log(num1 + " + " + num2 + " = " + (num1 + num2));
 
-if (isNaN(num1) || isNaN(num2)) {
-  console.log(colors.red + "❌ Error: Please provide valid numbers." + colors.reset);
-  process.exit(1);
-}
+} else if (operation === "subtract") {
+  console.log(num1 + " - " + num2 + " = " + (num1 - num2));
 
-let result;
+} else if (operation === "multiply") {
+  console.log(num1 + " x " + num2 + " = " + (num1 * num2));
 
-switch (operation) {
-  case "add":
-    result = num1 + num2;
-    console.log(colors.green + `✅ ${num1} + ${num2} = ${result}` + colors.reset);
-    break;
+} else if (operation === "divide") {
+  if (num2 === 0) {
+    console.log("Error: Cannot divide by zero.");
+  } else {
+    console.log(num1 + " / " + num2 + " = " + (num1 / num2));
+  }
 
-  case "subtract":
-    result = num1 - num2;
-    console.log(colors.green + `✅ ${num1} - ${num2} = ${result}` + colors.reset);
-    break;
-
-  case "multiply":
-    result = num1 * num2;
-    console.log(colors.green + `✅ ${num1} × ${num2} = ${result}` + colors.reset);
-    break;
-
-  case "divide":
-    if (num2 === 0) {
-      console.log(colors.red + "❌ Error: Division by zero is not allowed." + colors.reset);
-      process.exit(1);
-    }
-    result = num1 / num2;
-    console.log(colors.green + `✅ ${num1} ÷ ${num2} = ${result}` + colors.reset);
-    break;
-
-  case "modulus":
-    if (num2 === 0) {
-      console.log(colors.red + "❌ Error: Modulus by zero is not allowed." + colors.reset);
-      process.exit(1);
-    }
-    result = num1 % num2;
-    console.log(colors.green + `✅ ${num1} % ${num2} = ${result}` + colors.reset);
-    break;
-
-  case "power":
-    result = Math.pow(num1, num2);
-    console.log(colors.green + `✅ ${num1} ^ ${num2} = ${result}` + colors.reset);
-    break;
-
-  default:
-    console.log(colors.red + `❌ Error: Unknown operation "${operation}"` + colors.reset);
-    console.log(colors.yellow + "Valid operations: add, subtract, multiply, divide, modulus, power" + colors.reset);
-    process.exit(1);
+} else {
+  console.log("Unknown operation: " + operation);
+  console.log("Valid options: add, subtract, multiply, divide");
 }
